@@ -1,40 +1,65 @@
 #include <stdio.h>
-
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+#define tam 11
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+    char matriz[tam][tam];  
+    int i, j;
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+    // Preenchendo a primeira linha com letras de A a J
+    matriz[0][0] = ' ';  // Primeira posição é um espaço
+    for (j = 1; j < tam; j++) {
+        matriz[0][j] = 'A' + (j - 1);  // Letras de A a J
+    }
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+    // Preenchendo a primeira coluna com números de 1 a 9
+    for (i = 1; i < tam; i++) {
+        matriz[i][0] = '0' + i;  // Números de 1 a 9 (como caractere)
+    }
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
+    // Preenchendo o restante da matriz com '0'
+    for (i = 1; i < tam; i++) {
+        for (j = 1; j < tam; j++) {
+            matriz[i][j] = '0';  // Preenchendo com '0'
+        }
+    }
     
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    
+//51 valor para Numero 3 
+//Com o vetor de char pode usar um numero da tabele asc para representar numero ou letra
+matriz [8][3] = '3';
+matriz [7][3] = '3';
+matriz [6][3] = '3';
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+matriz [1][3] = '3';
+matriz [1][2] = '3';
+matriz [1][1] = '3';
+
+matriz [1][7] = 51;
+matriz [1][8] = 51;
+matriz [1][9] = 51;
+
+matriz [3][7] = 51;
+matriz [4][8] = 51;
+matriz [5][9] = 51;
+
+matriz [4][1] = 51;
+matriz [4][2] = 51;
+matriz [4][3] = 51;
+
+
+
+    // Imprimindo a matriz desde a posição 0 de I e J para pegar a linha numerica e alfabética
+    for (i = 0; i < tam; i++) {
+        for (j = 0; j < tam; j++) {
+          // Se for o número 10 na primeira coluna, exibe corretamente
+            if (i == 10 && j == 0) {
+                printf("%3s ", "10");
+            } else {
+                printf("%3c ", matriz[i][j]);
+            }
+        }
+        printf("\n");
+    }
 
     return 0;
 }
