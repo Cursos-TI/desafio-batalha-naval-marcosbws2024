@@ -1,104 +1,139 @@
-
 #include <stdio.h>
-#define tam 11
+#include <stdlib.h>
 
-int main() {
-	char matriz[tam][tam];
+/***********************************Definição das Constantes*************************/
+#define TAM 11    //define o tamanho do tavbuleiro.
+#define GEO '3'    //define o numero que ser usado para desenhar as formas Geometricas 
+#define DESTAB '.' //define a figura que preecher no tabuleiro tirando a guia numerica e alfabetica 
+
+
+//Cria todo o tabeleiro, mas ainda nC#o preenche as formas numericas e alfabeticas
+void criandoTabuleiro(char tab[TAM][TAM]) {
+	int i, j;
+	// Inicializando matriz, comeC'a do zero pois preenche tudo
+	for (i = 0; i < TAM; i++) {
+		for (j = 0; j < TAM; j++) {
+			tab[i][j] = DESTAB;
+		}
+	}
+}
+
+//Cria a primeira linha fazendo a guia de posiC'C#o de coluna em ordem alfabC)tica
+void criarGuiaAlfabetica(char tab[TAM][TAM]) {
+	int j;
+	tab[0][0] = ' '; // Canto superior esquerdo com campo vazio
+	for (j = 1; j < TAM; j++) {//comeC'a a preencher iniciando em o j em 1 por que o 0 deve ficar vazio
+		tab[0][j] = 'A' + (j - 1); //incia o preenchimento da odem alfabetica
+	}
+}
+
+
+//Cria a primeira coluna para guiar a posiC'C#o em ordem numerica.
+void criarGuiaNumerica(char tab[TAM][TAM]) {
+	int i;
+	for (i = 1; i < TAM; i++) {
+		if (i < 10)
+			tab[i][0] = '0' + i; //esse formato escreve apenas de 0 a 9
+		else
+			tab[i][0] = 'X'; // Marcador temporC!rio para o numeros que passam de 9
+	}
+
+}
+// FunC'C#o para desenhar um losango Normal e Simples, pois o Tetraedro C) Formado pro 5 losangulos
+void desenhaLosango(char tab[TAM][TAM], int xPosicaoLosango, int yPosicaoLosango, int tamanhoLosango) {
+	int meio = tamanhoLosango / 2;
+	int i, largura;
+
+	for (i = -meio; i <= meio; i++) {
+        //Para desenha as formas geometricas usamos numeros negativos e possitivos, mas para calcular i positivamente converte o numero negativo em positivo com abs(i)
+		largura = meio - abs(i);
+		//Desenha a primera parte do do losangulo ^
+		if (xPosicaoLosango - largura >= 0 && xPosicaoLosango - largura < TAM && yPosicaoLosango + i >= 0 && yPosicaoLosango + i < TAM)
+			tab[yPosicaoLosango + i][xPosicaoLosango - largura] = GEO;
+		//desenha a segunda parte do losangulo v
+		if (yPosicaoLosango + largura >= 0 && xPosicaoLosango + largura < TAM && yPosicaoLosango + i >= 0 && yPosicaoLosango + i < TAM)
+			tab[yPosicaoLosango + i][xPosicaoLosango + largura] = GEO;
+	}
+}
+
+// FunC'C#o para desenhar uma cruz
+void desenhaCruz(char tab[TAM][TAM], int x, int y, int tamanho) {
+	int i;
+	for (i = -tamanho / 2; i <= tamanho / 2; i++) {
+		if (y + i >= 0 && y + i < TAM) tab[y + i][x] = GEO; // Desenha a Linha vertical
+		if (x + i >= 0 && x + i < TAM) tab[y][x + i] = GEO; // Desenha a Linha horizontal
+	}
+}
+
+// FunC'C#o para desenhar um cone
+void desenhaCone(char tab[TAM][TAM], int x, int y, int altura) {
+	int i, j;
+	for (i = 0; i < altura; i++) { //desenha as linhas 
+		for (j = -i; j <= i; j++) {//desenha as colunas
+			if (x + j >= 0 && x + j < TAM && y + i >= 0 && y + i < TAM)
+				tab[y + i][x + j] = GEO;
+		}
+	}
+}
+
+
+//desenhando o tabuleiro completo com as figuras Geometricas
+void imprimirTabuleiroCompleto(char tab[TAM][TAM]) {
 	int i, j;
 
-	// Preenchendo a primeira linha com letras de A a J
-	matriz[0][0] = ' ';  // Primeira posiC'C#o C) um espaC'o
-	for (j = 1; j < tam; j++) {
-		matriz[0][j] = 'A' + (j - 1);  // Letras de A a J
-	}
-
-	// Preenchendo a primeira coluna com nC:meros de 1 a 9
-	for (i = 1; i < tam; i++) {
-		matriz[i][0] = '0' + i;  // NC:meros de 1 a 9 (como caractere)
-	}
-
-	// Preenchendo o restante da matriz com '~'
-	for (i = 1; i < tam; i++) {
-		for (j = 1; j < tam; j++) {
-			matriz[i][j] = '~';  // Preenchendo com '0'
-		}
-	}
-
-//Posicionando o barco na diagonal debaixo para cima linha A10 ate coluna C8
-	for(int i =10, j=1; i<tam &&j<tam; i--,j++) {
-		if(j<4) {
-			matriz[i][j]='3';
-		}
-	}
-
-//Posicionando na diagonal a partir a linha A1 até a C3
-	for(int i=1, j=1; i<tam && j<tam; i++,j++) {
-		if(i<4) {
-			matriz[i][j]='1';
-		}
-	}
-
-//Posicionando na diagonal a partir da linha A3 até a C5 
-	for(int i=3, j=1; i<tam && j<tam; i++,j++) {
-		if(j<4)
-			matriz[i][j]='6';
-	}
-
-
-
-//Posicionando na vertical da linha E8 até E10
-	for(int i=8, j=1; j<tam && i<tam; i++,j++) {
-		matriz[i][5]='7';
-	}
-
-//Posicionando na vertical da linha I8 até I10
-	for(int i=8, j=1; j<tam && i<tam; i++,j++) {
-		matriz[i][9]='9';
-	}
-
-//Posiconando na horizontal a partir da linha E1 até G1 
-	for(int i=1, j=5; j<tam && i<tam; i++,j++) {
-		if(i<4) {
-			matriz[1][j]='8';
-		}
-	}
-
-//Posicionando na Diagonal a partir da linha I1 ate G3
-	for(int i=1, j=9; j<tam && i<tam; i++,j--) {
-		if(i<4) {
-			matriz[i][j]='5';
-		}
-	}
-
-//Posicionando na Diagonal a partir da linha J1 ate H4
-	for(int i=1, j=10; j<tam && i<tam; i++,j--) {
-		if(i<4) {
-			matriz[i][j]='4';
-		}
-	}
-
-
-//Posiconando na horizontal a partir da linha E5 até G5 
-	for(int i=5, j=5; j<tam && i<tam; i++,j++) {
-	    if(i<8) {
-		matriz[5][j]='2';
-	    }
-	}
-
-
-
-// Imprimindo a matriz desde a posiC'C#o 0 de I e J para pegar a linha numerica e alfabC)tica
-	for (i = 0; i < tam; i++) {
-		for (j = 0; j < tam; j++) {
-			// Se for o nC:mero 10 na primeira coluna, exibe corretamente
-			if (i == 10 && j == 0) {
-				printf("%3s ", "10");
+	// Imprimindo a matriz
+	for (i = 0; i < TAM; i++) {
+		for (j = 0; j < TAM; j++) {
+			if (i == 0 && j > 0) {
+				printf("%3c ", 'A' + (j - 1)); // Letras na primeira linha
+			} else if (j == 0 && i > 0) {
+				printf("%3d ", i); // Numeros na primeira coluna
 			} else {
-				printf("%3c ", matriz[i][j]);
+				printf("%3c ", tab[i][j]);//desenho completo da matriz com as figuras 
 			}
 		}
 		printf("\n");
 	}
+}
+
+
+
+int main() {
+	char tab[TAM][TAM];
+	int i, j;
+
+	// Inicializando matriz
+	criandoTabuleiro(tab);
+
+	// Preenchendo a primeira linha com letras de A a Z
+	criarGuiaAlfabetica(tab);
+
+	// Preenchendo a primeira coluna com nC:meros
+	criarGuiaNumerica(tab);
+	// Desenhando a Cruz
+	desenhaCruz(tab, 8, 4, 5);
+
+	// Desenhando o Cone
+	desenhaCone(tab, 3, 8, 2);
+
+	// Desenhando o Tetraedro com losangos
+	
+	//desloca todos os losangulos que formam o tetradro juntos
+	int deslocX = -3, deslocY = -3;
+	//define a quantidade caracteres que serão usados por lado para desenhar o losangulo
+	int tamanhoOcta = 1;
+	int distancia = tamanhoOcta / 2 + 1;
+	int xPosicao = (TAM / 2) + deslocX;
+	int yPosicao = (TAM / 2) + deslocY;
+
+	//Cria os losangulos um dentro do outro para formar o Tetraedro.
+	desenhaLosango(tab, xPosicao, yPosicao - distancia, tamanhoOcta);
+	desenhaLosango(tab, xPosicao, yPosicao, tamanhoOcta);
+	desenhaLosango(tab, xPosicao, yPosicao + distancia, tamanhoOcta);
+	desenhaLosango(tab, xPosicao + distancia, yPosicao, tamanhoOcta);
+	desenhaLosango(tab, xPosicao - distancia, yPosicao, tamanhoOcta);
+
+	imprimirTabuleiroCompleto(tab);
 
 	return 0;
 }
